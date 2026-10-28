@@ -103,7 +103,7 @@ python main.py
 The current script retrieves historical data for PETR4 and exports the results to:
 
 ```text
-data/petr4_historico.xlsx
+data/petr4_hist.xlsx
 ```
 
 The output directory and Excel file are generated locally when the script runs.
