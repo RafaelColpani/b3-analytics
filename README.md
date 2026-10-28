@@ -122,14 +122,10 @@ b3-analytics/
 └── README.md                # Project documentation
 ```
 
-## Data Sources and Limitations
+> [!IMPORTANT]
+> Historical stock market data is retrieved through the `yfinance` Python library, which accesses data made available by Yahoo Finance.
+> 
+> Data availability, historical coverage, and quality depend on the provider. Retrieved data should be validated before being used in financial analysis.
+>
+> This project is intended for educational and portfolio purposes only. It does not constitute investment advice.
 
-Historical stock market data is retrieved through the `yfinance` Python library, which accesses data made available by Yahoo Finance.
-
-Data availability, historical coverage, and quality depend on the provider. Retrieved data should be validated before being used in financial analysis.
-
-This project is intended for educational and portfolio purposes only. It does not constitute investment advice.
-
-## License
-
-A license will be selected in a future version.
