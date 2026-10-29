@@ -72,14 +72,6 @@ Cumulative return analysis for VALE3.
 
 ![VALE3 Cumulative Returns](docs/images/vale3-returns-comparison.png)
 
-## Excel Dashboard
-
-An overview of financial indicators and comparative analysis presented in an Excel dashboard.
-
-![Excel Analytics Dashboard](docs/images/excel-dashboard.png)
-
-> **Note:** The Excel dashboard image is a placeholder until `docs/images/excel-dashboard.png` is generated and added to the project.
-
 ## Requirements
 
 - Python 3
