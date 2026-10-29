@@ -1,37 +1,63 @@
-#Libs
-import yfinance as yf
+
+# Libraries
 from pathlib import Path
 
-# Project settings "yfinance"
-TICKER = "PETR4.SA"
+import yfinance as yf
+
+# Project settings
+TICKERS = ["PETR4.SA", "VALE3.SA"]
 PERIOD = "1y"
 
-# Folder where the project is located
+# Project directory
 PROJECT_DIR = Path(__file__).resolve().parent
 OUTPUT_DIR = PROJECT_DIR / "data"
-OUTPUT_DIR.mkdir(exist_ok=True)
+OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 # Download historical quotes
-print(f"Searching for data from {TICKER}...")
+print(f"Searching for data from {', '.join(TICKERS)}...")
 
-action = yf.Ticker(TICKER)
-data = action.history(period=PERIOD, auto_adjust=True)
+data = yf.download(
+    tickers=TICKERS,
+    period=PERIOD,
+    interval="1d",
+    auto_adjust=True,
+    progress=False
+)
 
 if data.empty:
     raise RuntimeError(
         "No data was returned. Check your internet connection "
-        "and the action code."
+        "and ticker symbols."
     )
 
-# Remove time zone information from the index
-data.index = data.index.tz_localize(None)
+# Extract adjusted closing prices
+prices = data["Close"].copy()
 
-# Save the data in Excel
-arq_excel = OUTPUT_DIR / "petr4_hist.xlsx"
-data.to_excel(arq_excel, engine="xlsxwriter")
+# Use shorter column names
+prices = prices.rename(columns={
+    "PETR4.SA": "PETR4",
+    "VALE3.SA": "VALE3"
+})
 
-# Terminal Logs
-print(f"Data collected: {len(data)} records")
-print(f"File saved to: {arq_excel}")
+# Remove timezone information
+prices.index = prices.index.tz_localize(None)
+prices.index.name = "Date"
+
+# Sort by date
+prices = prices.sort_index()
+
+# Save data to Excel
+excel_path = OUTPUT_DIR / "vale3_hist.xlsx"
+
+with __import__("pandas").ExcelWriter(
+    excel_path,
+    engine="xlsxwriter",
+    datetime_format="yyyy-mm-dd"
+) as writer:
+    prices.to_excel(writer, sheet_name="Prices")
+
+# Terminal logs
+print(f"Data collected: {len(prices)} records")
+print(f"File saved to: {excel_path}")
 print("\nLatest quotes:")
-print(data[["Close", "Volume"]].tail())
+print(prices.tail())
